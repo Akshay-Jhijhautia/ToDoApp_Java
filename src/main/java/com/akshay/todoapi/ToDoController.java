@@ -13,8 +13,10 @@ import java.util.List;
 public class ToDoController {
 
     private static List<Todo> todoList;
+    private ToDoService todoService;
 
-    public ToDoController() {
+    public ToDoController(ToDoService todoService) { // inject/send/pass an object of todo service in this controller function
+        this.todoService = todoService;
         todoList = new ArrayList<>();
         todoList.add(new Todo(1,false,"Todo 1",1));
         todoList.add(new Todo(2,true,"Todo 2",2));
