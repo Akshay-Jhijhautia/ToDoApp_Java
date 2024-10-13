@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -40,6 +41,39 @@ public class ToDoController {
         String errorMessage = "Resource with ID " + todoId + " not found.";
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
     }
+
+    @PatchMapping("/{todoId}")
+    public ResponseEntity<Object> updateTodoById(@PathVariable Long todoId, @RequestBody HashMap<String,Object> map) {
+        for(Todo todo: todoList) {
+            if(todo.getId() == todoId) {
+                map.forEach((key,value) -> {
+                    switch (key) {
+                        case "title":
+                            if(value instanceof String) {
+                                todo.setTitle((String) value);
+                            }
+                            break;
+                        case "completed":
+                            if(value instanceof Boolean) {
+                                todo.setCompleted((Boolean) value);
+                            }
+                            break;
+                        case "userId":
+                            if(value instanceof Integer) {
+                                todo.setUserId((Integer) value);
+                            }
+                            break;
+                        default:
+                            throw new IllegalArgumentException("Invalid field: " + key);
+                    }
+                });
+                return ResponseEntity.status(HttpStatus.OK).body(todo);
+            }
+        }
+        String errorMessage = "Resource with ID " + todoId + " not found.";
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
+    }
+
 
     @DeleteMapping("/{todoId}")
     public ResponseEntity<Object> deleteTodoById(@PathVariable int todoId) {
