@@ -31,12 +31,25 @@ public class ToDoController {
     }
 
     @GetMapping("/{todoId}")
-    public ResponseEntity<Todo> getTodoById(@PathVariable Long todoId){
+    public ResponseEntity<Object> getTodoById(@PathVariable Long todoId){
         for(Todo todo: todoList) {
             if(todo.getId() == todoId) {
                 return ResponseEntity.status(HttpStatus.OK).body(todo);
             }
         }
-        return ResponseEntity.notFound().build();
+        String errorMessage = "Resource with ID " + todoId + " not found.";
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
+    }
+
+    @DeleteMapping("/{todoId}")
+    public ResponseEntity<Object> deleteTodoById(@PathVariable int todoId) {
+        for(Todo todo: todoList) {
+            if(todo.getId() == todoId) {
+                todoList.remove(todo);
+                return ResponseEntity.status(HttpStatus.OK).body(todo);
+            }
+        }
+        String errorMessage = "Resource with ID " + todoId + " not found.";
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
     }
 }
