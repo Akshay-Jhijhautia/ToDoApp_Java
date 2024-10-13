@@ -6,6 +6,6 @@ import org.springframework.stereotype.Service;
 public class FakeTodoService implements ToDoService{
     @Override
     public String doSomething() {
-        return "Do Something";
+        return "From Fake To Do Service";
     }
 }

@@ -14,12 +14,16 @@ import java.util.List;
 @RequestMapping("/api/v1/todos")
 public class ToDoController {
 
-    private ToDoService todoService;
+    private ToDoService fakeTodoService;
+    private ToDoService anotherTodoService;
 
     private static List<Todo> todoList;
 
-    public ToDoController(@Qualifier("AnotherToDoService")ToDoService todoService) {
-        this.todoService = todoService;
+    public ToDoController(
+            @Qualifier("AnotherToDoService")ToDoService anotherTodoService,
+            @Qualifier("FakeTodoService")ToDoService fakeTodoService) {
+        this.anotherTodoService = anotherTodoService;
+        this.fakeTodoService = fakeTodoService;
         todoList = new ArrayList<>();
         todoList.add(new Todo(1,false,"Todo 1",1));
         todoList.add(new Todo(2,true,"Todo 2",2));
@@ -27,7 +31,8 @@ public class ToDoController {
 
     @GetMapping()
     public ResponseEntity<List<Todo>> getTodos(@RequestParam(required = false) Boolean isCompleted) {
-        System.out.println(todoService.doSomething());
+        System.out.println(anotherTodoService.doSomething());
+        System.out.println(fakeTodoService.doSomething());
         if(isCompleted == null) {
             return ResponseEntity.status(HttpStatus.OK).body(todoList);
         }
