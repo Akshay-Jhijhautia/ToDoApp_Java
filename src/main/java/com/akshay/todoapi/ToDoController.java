@@ -1,5 +1,7 @@
 package com.akshay.todoapi;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,11 +14,13 @@ import java.util.List;
 @RequestMapping("/api/v1/todos")
 public class ToDoController {
 
-    private static List<Todo> todoList;
+    @Autowired
+    @Qualifier("AnotherToDoService")
     private ToDoService todoService;
 
-    public ToDoController(ToDoService todoService) { // inject/send/pass an object of todo service in this controller function
-        this.todoService = todoService;
+    private static List<Todo> todoList;
+
+    public ToDoController() {
         todoList = new ArrayList<>();
         todoList.add(new Todo(1,false,"Todo 1",1));
         todoList.add(new Todo(2,true,"Todo 2",2));
@@ -25,6 +29,7 @@ public class ToDoController {
     @GetMapping()
     public ResponseEntity<List<Todo>> getTodos(@RequestParam(required = false) Boolean isCompleted) {
         if(isCompleted == null) {
+            System.out.println(todoService.doSomething());
             return ResponseEntity.status(HttpStatus.OK).body(todoList);
         }
 
