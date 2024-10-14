@@ -26,6 +26,6 @@ dependencies {
     runtimeOnly group: 'org.aspectj', name: 'aspectjweaver', version: '1.9.8'
 }
 
-tasks.named('test') {
+test {
     useJUnitPlatform()
 }
